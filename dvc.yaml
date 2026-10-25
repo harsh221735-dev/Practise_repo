@@ -3,8 +3,8 @@ stages:
     cmd: python src/data_ingestion.py
     deps:
     - src/data_ingestion.py
-    #params:
-    #- data_ingestion.test_size
+    params:
+    - data_ingestion.test_size
     outs:
     - data/raw_data
   data_preprocessing:
@@ -15,12 +15,12 @@ stages:
     outs:
     - data/processed
   feature_processing:
-    cmd: python src/feature_processing.py
+    cmd: python src\feature_processing.py
     deps:
     - data/processed
     - src/feature_processing.py
-    #params:
-    #- feature_processing.max_features
+    params:
+    - feature_processing.max_features
     outs:
     - data/tokenised
   model_training:
@@ -28,9 +28,9 @@ stages:
     deps:
     - data/tokenised
     - src/model_training.py
-    #params:
-    #- model_training.n_estimators
-    #- model_training.random_state
+    params:
+    - model_training.n_estimators
+    - model_training.random_state
     outs:
     - models/model.pkl
   model_evaluation:
@@ -41,3 +41,10 @@ stages:
     metrics:
     - reports/metrics.json
 
+params:
+- dvclive/params.yaml
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step

@@ -69,7 +69,7 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame, data_path: str)
         raise
 def main():
     try:
-        with open('params.yml', 'r') as file:
+        with open('params.yaml', 'r') as file:
             params = yaml.safe_load(file)
         test_size = params['data_ingestion']['test_size']
         data_path = r'C:\Users\ADMIN\Desktop\MLOPS project\spam.csv'
