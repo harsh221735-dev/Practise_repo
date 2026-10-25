@@ -2,13 +2,14 @@ import logging
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
+import yaml
 
 #creating logging obj
 logger = logging.getLogger('data_ingestion')
 logger.setLevel('DEBUG')
 
-#logging in console
+
+#logging in console 
 console_handler = logging.StreamHandler()
 console_handler.setLevel('DEBUG')
 
@@ -39,7 +40,7 @@ def load_data(data_url: str) -> pd.DataFrame:
     except Exception as e:
         logger.error('Error while loadung %s',e)
         raise
-
+    
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     try:
         df.drop(columns = ['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'], inplace = True)
@@ -68,7 +69,9 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame, data_path: str)
         raise
 def main():
     try:
-        test_size = 0.2
+        with open('params.yml', 'r') as file:
+            params = yaml.safe_load(file)
+        test_size = params['data_ingestion']['test_size']
         data_path = r'C:\Users\ADMIN\Desktop\MLOPS project\spam.csv'
         df = load_data(data_path)
         processed_data = preprocess_data(df)

@@ -4,20 +4,20 @@ import pandas as pd
 import pickle
 import logging
 from sklearn.ensemble import RandomForestClassifier
-#import yaml
+import yaml
 
 # Ensure the "logs" directory exists
 log_dir = 'logs'
 os.makedirs(log_dir, exist_ok=True)
 
 # logging configuration
-logger = logging.getLogger('model_building')
+logger = logging.getLogger('model_training')
 logger.setLevel('DEBUG')
 
 console_handler = logging.StreamHandler()
 console_handler.setLevel('DEBUG')
 
-log_file_path = os.path.join(log_dir, 'model_building.log')
+log_file_path = os.path.join(log_dir, 'model_training.log')
 file_handler = logging.FileHandler(log_file_path)
 file_handler.setLevel('DEBUG')
 
@@ -119,12 +119,12 @@ def save_model(model, file_path: str) -> None:
 
 def main():
     try:
-        #params = load_params('params.yaml')['model_building']
+        params = load_params('params.yaml')
         train_data = load_data(r'data\tokenised\train_tfidf.csv')
         X_train = train_data.iloc[:,:-1].values
         y_train = train_data.iloc[:,-1].values
 
-        clf = train_model(X_train, y_train, {'n_estimators':50,'random_state':2})
+        clf = train_model(X_train, y_train, params['model_training'])
         
         model_save_path = 'models/model.pkl'
         save_model(clf, model_save_path)
